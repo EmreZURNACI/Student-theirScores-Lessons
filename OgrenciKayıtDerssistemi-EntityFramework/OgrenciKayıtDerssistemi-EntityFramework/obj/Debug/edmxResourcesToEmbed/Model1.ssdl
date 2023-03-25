@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DbKatmanlıMimariModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="derslerTBL">
+    <Key>
+      <PropertyRef Name="dersID" />
+    </Key>
+    <Property Name="dersID" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="dersAd" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="notlarTBL">
+    <Key>
+      <PropertyRef Name="notID" />
+    </Key>
+    <Property Name="notID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ogrenci" Type="int" />
+    <Property Name="ders" Type="tinyint" />
+    <Property Name="dersNot" Type="tinyint" />
+  </EntityType>
+  <EntityType Name="ogrenciTBL">
+    <Key>
+      <PropertyRef Name="ogrenciID" />
+    </Key>
+    <Property Name="ogrenciID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ogrenciAd" Type="varchar" MaxLength="50" />
+    <Property Name="ogrenciSoyad" Type="varchar" MaxLength="50" />
+    <Property Name="ogrenciNo" Type="char" MaxLength="5" />
+    <Property Name="ogrenciBolum" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <Association Name="FK_notlarTBL_derslerTBL">
+    <End Role="derslerTBL" Type="Self.derslerTBL" Multiplicity="0..1" />
+    <End Role="notlarTBL" Type="Self.notlarTBL" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="derslerTBL">
+        <PropertyRef Name="dersID" />
+      </Principal>
+      <Dependent Role="notlarTBL">
+        <PropertyRef Name="ders" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_notlarTBL_ogrenciTBL">
+    <End Role="ogrenciTBL" Type="Self.ogrenciTBL" Multiplicity="0..1" />
+    <End Role="notlarTBL" Type="Self.notlarTBL" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ogrenciTBL">
+        <PropertyRef Name="ogrenciID" />
+      </Principal>
+      <Dependent Role="notlarTBL">
+        <PropertyRef Name="ogrenci" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DbKatmanlıMimariModelStoreContainer">
+    <EntitySet Name="derslerTBL" EntityType="Self.derslerTBL" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="notlarTBL" EntityType="Self.notlarTBL" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ogrenciTBL" EntityType="Self.ogrenciTBL" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_notlarTBL_derslerTBL" Association="Self.FK_notlarTBL_derslerTBL">
+      <End Role="derslerTBL" EntitySet="derslerTBL" />
+      <End Role="notlarTBL" EntitySet="notlarTBL" />
+    </AssociationSet>
+    <AssociationSet Name="FK_notlarTBL_ogrenciTBL" Association="Self.FK_notlarTBL_ogrenciTBL">
+      <End Role="ogrenciTBL" EntitySet="ogrenciTBL" />
+      <End Role="notlarTBL" EntitySet="notlarTBL" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

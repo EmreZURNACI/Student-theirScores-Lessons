@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DbOgrenciDerslerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="adminTBL">
+    <Key>
+      <PropertyRef Name="adminID" />
+    </Key>
+    <Property Name="adminID" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="kullaniciAdi" Type="varchar" MaxLength="50" />
+    <Property Name="password" Type="varchar" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="derslerTBL">
+    <Key>
+      <PropertyRef Name="dersID" />
+    </Key>
+    <Property Name="dersID" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="dersAd" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="notlarTBL">
+    <Key>
+      <PropertyRef Name="ogrenciID" />
+    </Key>
+    <Property Name="ogrenciID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ogrenci" Type="int" />
+    <Property Name="ders" Type="tinyint" />
+    <Property Name="vizeNot" Type="decimal" Precision="5" Scale="2" />
+    <Property Name="finalNot" Type="decimal" Precision="5" Scale="2" />
+    <Property Name="notOrtalaması" Type="decimal" Precision="5" Scale="2" />
+    <Property Name="gecmeDurumu" Type="char" MaxLength="5" />
+  </EntityType>
+  <EntityType Name="ogrenciTBL">
+    <Key>
+      <PropertyRef Name="ogrenciID" />
+    </Key>
+    <Property Name="ogrenciID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ogrenciAd" Type="varchar" MaxLength="50" />
+    <Property Name="ogrenciSoyad" Type="varchar" MaxLength="50" />
+    <Property Name="ogrenciNo" Type="char" MaxLength="5" />
+    <Property Name="ogrenciBolum" Type="varchar" MaxLength="50" />
+    <Property Name="ogrenciTamAD" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <Association Name="FK_notlarTBL_derslerTBL">
+    <End Role="derslerTBL" Type="Self.derslerTBL" Multiplicity="0..1" />
+    <End Role="notlarTBL" Type="Self.notlarTBL" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="derslerTBL">
+        <PropertyRef Name="dersID" />
+      </Principal>
+      <Dependent Role="notlarTBL">
+        <PropertyRef Name="ders" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_notlarTBL_ogrenciTBL1">
+    <End Role="ogrenciTBL" Type="Self.ogrenciTBL" Multiplicity="0..1" />
+    <End Role="notlarTBL" Type="Self.notlarTBL" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ogrenciTBL">
+        <PropertyRef Name="ogrenciID" />
+      </Principal>
+      <Dependent Role="notlarTBL">
+        <PropertyRef Name="ogrenci" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+  <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="version" Type="int" Mode="In" />
+    <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+  </Function>
+  <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="version" Type="int" Mode="In" />
+    <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+  </Function>
+  <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <EntityContainer Name="DbOgrenciDerslerModelStoreContainer">
+    <EntitySet Name="adminTBL" EntityType="Self.adminTBL" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="derslerTBL" EntityType="Self.derslerTBL" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="notlarTBL" EntityType="Self.notlarTBL" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ogrenciTBL" EntityType="Self.ogrenciTBL" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_notlarTBL_derslerTBL" Association="Self.FK_notlarTBL_derslerTBL">
+      <End Role="derslerTBL" EntitySet="derslerTBL" />
+      <End Role="notlarTBL" EntitySet="notlarTBL" />
+    </AssociationSet>
+    <AssociationSet Name="FK_notlarTBL_ogrenciTBL1" Association="Self.FK_notlarTBL_ogrenciTBL1">
+      <End Role="ogrenciTBL" EntitySet="ogrenciTBL" />
+      <End Role="notlarTBL" EntitySet="notlarTBL" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DbKatmanlıMimariModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="derslerTBL">
+    <Key>
+      <PropertyRef Name="dersID" />
+    </Key>
+    <Property Name="dersID" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="dersAd" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="notlarTBLs" Relationship="Self.FK_notlarTBL_derslerTBL" FromRole="derslerTBL" ToRole="notlarTBL" />
+  </EntityType>
+  <EntityType Name="notlarTBL">
+    <Key>
+      <PropertyRef Name="notID" />
+    </Key>
+    <Property Name="notID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ogrenci" Type="Int32" />
+    <Property Name="ders" Type="Byte" />
+    <Property Name="dersNot" Type="Byte" />
+    <NavigationProperty Name="derslerTBL" Relationship="Self.FK_notlarTBL_derslerTBL" FromRole="notlarTBL" ToRole="derslerTBL" />
+    <NavigationProperty Name="ogrenciTBL" Relationship="Self.FK_notlarTBL_ogrenciTBL" FromRole="notlarTBL" ToRole="ogrenciTBL" />
+  </EntityType>
+  <EntityType Name="ogrenciTBL">
+    <Key>
+      <PropertyRef Name="ogrenciID" />
+    </Key>
+    <Property Name="ogrenciID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ogrenciAd" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ogrenciSoyad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ogrenciNo" Type="String" MaxLength="5" FixedLength="true" Unicode="false" />
+    <Property Name="ogrenciBolum" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="notlarTBLs" Relationship="Self.FK_notlarTBL_ogrenciTBL" FromRole="ogrenciTBL" ToRole="notlarTBL" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <Association Name="FK_notlarTBL_derslerTBL">
+    <End Role="derslerTBL" Type="Self.derslerTBL" Multiplicity="0..1" />
+    <End Role="notlarTBL" Type="Self.notlarTBL" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="derslerTBL">
+        <PropertyRef Name="dersID" />
+      </Principal>
+      <Dependent Role="notlarTBL">
+        <PropertyRef Name="ders" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_notlarTBL_ogrenciTBL">
+    <End Role="ogrenciTBL" Type="Self.ogrenciTBL" Multiplicity="0..1" />
+    <End Role="notlarTBL" Type="Self.notlarTBL" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ogrenciTBL">
+        <PropertyRef Name="ogrenciID" />
+      </Principal>
+      <Dependent Role="notlarTBL">
+        <PropertyRef Name="ogrenci" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DbOgrenciveDersler" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="derslerTBLs" EntityType="Self.derslerTBL" />
+    <EntitySet Name="notlarTBLs" EntityType="Self.notlarTBL" />
+    <EntitySet Name="ogrenciTBLs" EntityType="Self.ogrenciTBL" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+    <AssociationSet Name="FK_notlarTBL_derslerTBL" Association="Self.FK_notlarTBL_derslerTBL">
+      <End Role="derslerTBL" EntitySet="derslerTBLs" />
+      <End Role="notlarTBL" EntitySet="notlarTBLs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_notlarTBL_ogrenciTBL" Association="Self.FK_notlarTBL_ogrenciTBL">
+      <End Role="ogrenciTBL" EntitySet="ogrenciTBLs" />
+      <End Role="notlarTBL" EntitySet="notlarTBLs" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
